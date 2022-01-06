@@ -61,13 +61,16 @@ export default class App extends Component {
 			quantity: parseInt(this.state.currentItem.quantity) || 0,
 			completed: false,
 		};
-		console.log(itemToAdd.name);
-		console.log();
-		if (itemToAdd.name !== '' && itemToAdd.quantity > 0)
-			this.setState((prevState) => ({
-				obiecte: [...prevState.obiecte, itemToAdd],
-			}));
-		else alert('Nu ati completat campurile');
+		if (
+			this.state.obiecte.filter((item) => item.name === itemToAdd.name)
+				.length === 0
+		) {
+			if (itemToAdd.name !== '' && itemToAdd.quantity > 0)
+				this.setState((prevState) => ({
+					obiecte: [...prevState.obiecte, itemToAdd],
+				}));
+			else alert('Nu ati completat campurile');
+		} else alert('Deja ati adaugat un element cu acest nume');
 	}
 	render() {
 		return (
