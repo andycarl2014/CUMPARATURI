@@ -9,7 +9,7 @@ export default class App extends Component {
 			currentItem: {
 				// Current item to be added in the array
 				name: '',
-				quantity: null,
+				quantity: '',
 			},
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -62,6 +62,15 @@ export default class App extends Component {
 			return { obiecte: updatedObjects2 }; // Returns the modified state with the modified item
 		});
 	}
+	ClearFields() {
+		this.setState((prevState) => {
+			// Resets the state of currentItem to clear input fields
+			let currentItem = { ...prevState.currentItem };
+			currentItem.name = '';
+			currentItem.quantity = '';
+			return { currentItem };
+		});
+	}
 	handleClick2() {
 		const itemToAdd = {
 			// Current item from the input fields
@@ -74,12 +83,13 @@ export default class App extends Component {
 			this.state.obiecte.filter((item) => item.name === itemToAdd.name)
 				.length === 0 // If the item has not been already added to the array checks the inputs
 		) {
-			if (itemToAdd.name !== '' && itemToAdd.quantity > 0)
+			if (itemToAdd.name !== '' && itemToAdd.quantity > 0) {
 				// If the inputs are completed it adds the item using setState
 				this.setState((prevState) => ({
 					obiecte: [...prevState.obiecte, itemToAdd],
 				}));
-			else alert('Nu ati completat campurile');
+				this.ClearFields();
+			} else alert('Nu ati completat campurile');
 		} else alert('Deja ati adaugat un element cu acest nume');
 	}
 	render() {
@@ -110,6 +120,7 @@ export default class App extends Component {
 				</div>
 				<div className='mijloc'>
 					<input
+						id='nume'
 						type='text'
 						value={this.state.currentItem.name}
 						onChange={(e) =>
@@ -122,6 +133,7 @@ export default class App extends Component {
 						}
 					/>
 					<input
+						id='quantity'
 						type='number'
 						min={1}
 						value={this.state.currentItem.quantity}
