@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/CUMPARATURI/static/css/main.31dfb3f0.css",
-    "main.js": "/CUMPARATURI/static/js/main.c8aea3be.js",
+    "main.js": "/CUMPARATURI/static/js/main.1ba16527.js",
     "index.html": "/CUMPARATURI/index.html",
     "main.31dfb3f0.css.map": "/CUMPARATURI/static/css/main.31dfb3f0.css.map",
-    "main.c8aea3be.js.map": "/CUMPARATURI/static/js/main.c8aea3be.js.map"
+    "main.1ba16527.js.map": "/CUMPARATURI/static/js/main.1ba16527.js.map"
   },
   "entrypoints": [
     "static/css/main.31dfb3f0.css",
-    "static/js/main.c8aea3be.js"
+    "static/js/main.1ba16527.js"
   ]
 }
