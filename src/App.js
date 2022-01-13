@@ -11,8 +11,8 @@ export default class App extends Component {
 			obiecte: [], // Array with all the objects , bought and not bought
 			currentItem: {
 				// Current item to be added in the array
-				name: '',
-				quantity: '',
+				name: CONSTANTS.empty,
+				quantity: CONSTANTS.empty,
 			},
 		};
 		this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this);
@@ -72,8 +72,8 @@ export default class App extends Component {
 		this.setState(() => {
 			// Resets the state of currentItem to clear input fields
 			let currentItem = this.state?.currentItem;
-			currentItem.name = '';
-			currentItem.quantity = '';
+			currentItem.name = CONSTANTS.empty;
+			currentItem.quantity = CONSTANTS.empty;
 			return { currentItem };
 		});
 	}
@@ -89,7 +89,7 @@ export default class App extends Component {
 			this.state.obiecte.filter((item) => item.name === itemToAdd.name)
 				.length === 0 // If the item has not been already added to the array checks the inputs
 		) {
-			if (itemToAdd.name !== '' && itemToAdd.quantity > 0) {
+			if (itemToAdd.name !== CONSTANTS.empty && itemToAdd.quantity > 0) {
 				let oldObj = this.state.obiecte;
 				// If the inputs are completed it adds the item using setState
 				this.setState(() => ({
