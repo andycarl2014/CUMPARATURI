@@ -11,36 +11,35 @@
 		0 20px 1px -9px rgba(0, 0, 0, 0.15);
 	padding: 30px;
 }
-.deCumparat {
+.toBuy {
 	height: fit-content;
 	width: fit-content;
 }
-.cumparate {
+.alreadyBought {
 	height: fit-content;
 	width: 200px;
 }
-.incomplet {
+.uncompletedItem {
 	display: flex;
-
 	flex-direction: row;
-	border-bottom: 1px solid black;
+	margin-bottom: 5px;
 }
-.incomplet input {
+.uncompletedItem input {
 	margin-top: auto;
 	margin-bottom: auto;
 }
-.mijloc {
+.Main {
 	display: flex;
 	flex-direction: column;
 }
-.mijloc form {
+.Main form {
 	display: flex;
 	flex-direction: column;
 }
-.mijloc form input {
+.Main form input {
 	margin: 20px;
 }
-.mijloc form button {
+.Main form button {
 	background-color: rgb(27, 135, 236);
 	color: white;
 	border: none;

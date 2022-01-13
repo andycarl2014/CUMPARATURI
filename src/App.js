@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import Item from './Item';
+import ListItems from './ListItems';
+import { v4 as uuidv4 } from 'uuid';
 import './style.css';
+import MainInput from './MainInput';
+import { CONSTANTS } from './CONST';
 export default class App extends Component {
 	constructor(props) {
 		super(props);
@@ -12,16 +15,17 @@ export default class App extends Component {
 				quantity: '',
 			},
 		};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleClick2 = this.handleClick2.bind(this);
+		this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this);
+		this.handleClickAddButton = this.handleClickAddButton.bind(this);
 		this.handleClickPlus = this.handleClickPlus.bind(this);
 		this.handleClickMinus = this.handleClickMinus.bind(this);
+		this.changeState = this.changeState.bind(this);
 	}
-
-	handleChange(key) {
+	handleCheckboxCheck(key) {
+		const oldObj = this.state.obiecte;
 		// Sets the state to completed or not completed based on the last state
-		this.setState((prevState) => {
-			const updatedObjects = prevState.obiecte.map((item) => {
+		this.setState(() => {
+			const updatedObjects = oldObj.map((item) => {
 				if (item.key === key) {
 					// If key of the item in the array is === to the key of the Item to be modified, the completed property is changed
 					item.completed = !item.completed;
@@ -32,9 +36,10 @@ export default class App extends Component {
 		});
 	}
 	handleClickPlus(key) {
+		const oldObj = this.state.obiecte;
 		// Modifies the quantity of the item
-		this.setState((prevState) => {
-			const updatedObjects = prevState.obiecte.map((item) => {
+		this.setState(() => {
+			const updatedObjects = oldObj.map((item) => {
 				if (item.key === key) {
 					// If key of the item in the array is === to the key of the Item to be modified
 					item.quantity = item.quantity + 1; // Increases quantity by 1
@@ -45,9 +50,10 @@ export default class App extends Component {
 		});
 	}
 	handleClickMinus(key) {
+		const oldObj = this.state.obiecte;
 		// Modifies the quantity of the item
-		this.setState((prevState) => {
-			const updatedObjects = prevState.obiecte.map((item) => {
+		this.setState(() => {
+			const updatedObjects = oldObj.map((item) => {
 				if (item.key === key) {
 					// If key of the item in the array is === to the key of the Item to be modified
 					item.quantity = item.quantity - 1; // Decreases quantity by 1
@@ -62,21 +68,21 @@ export default class App extends Component {
 			return { obiecte: updatedObjects2 }; // Returns the modified state with the modified item
 		});
 	}
-	ClearFields() {
-		this.setState((prevState) => {
+	clearFields() {
+		this.setState(() => {
 			// Resets the state of currentItem to clear input fields
-			let currentItem = { ...prevState.currentItem };
+			let currentItem = this.state?.currentItem;
 			currentItem.name = '';
 			currentItem.quantity = '';
 			return { currentItem };
 		});
 	}
-	handleClick2() {
+	handleClickAddButton() {
 		const itemToAdd = {
 			// Current item from the input fields
-			key: this.state.obiecte.length,
-			name: this.state.currentItem.name,
-			quantity: parseInt(this.state.currentItem.quantity) || 0,
+			key: uuidv4(),
+			name: this.state.currentItem?.name,
+			quantity: parseInt(this.state.currentItem?.quantity) || 0,
 			completed: false,
 		};
 		if (
@@ -84,93 +90,47 @@ export default class App extends Component {
 				.length === 0 // If the item has not been already added to the array checks the inputs
 		) {
 			if (itemToAdd.name !== '' && itemToAdd.quantity > 0) {
+				let oldObj = this.state.obiecte;
 				// If the inputs are completed it adds the item using setState
-				this.setState((prevState) => ({
-					obiecte: [...prevState.obiecte, itemToAdd],
+				this.setState(() => ({
+					obiecte: [...oldObj, itemToAdd],
 				}));
-				this.ClearFields();
-			} else alert('Nu ati completat campurile');
-		} else alert('Deja ati adaugat un element cu acest nume');
+				this.clearFields();
+			} else alert(CONSTANTS.alerta1);
+		} else alert(CONSTANTS.alerta2);
+	}
+	changeState(e) {
+		this.setState(() => {
+			let currentItem = this.state.currentItem;
+			currentItem[e.target.id] = e.target.value;
+			return { currentItem };
+		});
 	}
 	render() {
+		const { obiecte, currentItem } = this.state;
+		const objBought = obiecte.filter((item) => item.completed === true);
+		const objNotBought = obiecte.filter((item) => item.completed === false);
 		return (
 			<div className='App'>
-				<div className='deCumparat'>
-					<h1>
-						{
-							this.state.obiecte.filter((item) => item.completed === false)
-								.length // Number of the items not bought
-						}{' '}
-						de cumparat
-					</h1>
-					{this.state.obiecte
-						.filter((item) => item.completed === false)
-						.map((item, index) => {
-							// Returns an Item for each uncompleted item in the array
-							return (
-								<Item
-									key={index}
-									item={item}
-									handleChange={this.handleChange}
-									handleClickPlus={this.handleClickPlus}
-									handleClickMinus={this.handleClickMinus}
-								/>
-							);
-						})}
-				</div>
-				<div className='mijloc'>
-					<input
-						id='nume'
-						type='text'
-						value={this.state.currentItem.name}
-						onChange={(e) =>
-							this.setState((prevState) => {
-								//Sets the state of the current item every time the input changes
-								let currentItem = { ...prevState.currentItem };
-								currentItem.name = e.target.value; // Sets the name of the current item
-								return { currentItem };
-							})
-						}
-					/>
-					<input
-						id='quantity'
-						type='number'
-						min={1}
-						value={this.state.currentItem.quantity}
-						onChange={(e) =>
-							this.setState((prevState) => {
-								// Sets the state of the current item every time the input changes
-								let currentItem = { ...prevState.currentItem };
-								currentItem.quantity = e.target.value; // Sets the quantity of the current item
-								return { currentItem };
-							})
-						}
-					/>
-					<button className='buton' onClick={this.handleClick2}>
-						Adauga
-					</button>
-				</div>
-				<div className='cumparate'>
-					<h1>
-						{
-							this.state.obiecte.filter((item) => item.completed === true)
-								.length // Number of the items bought
-						}{' '}
-						cumparate
-					</h1>
-					{this.state.obiecte
-						.filter((item) => item.completed === true)
-						.map((item) => {
-							// Returns an Item for each completed item in the array
-							return (
-								<Item
-									key={item.key}
-									item={item}
-									handleChange={this.handleChange}
-								/>
-							);
-						})}
-				</div>
+				<ListItems
+					for={CONSTANTS.bought}
+					objToList={objNotBought}
+					handleCheckboxCheck={this.handleCheckboxCheck}
+					handleClickPlus={this.handleClickPlus}
+					handleClickMinus={this.handleClickMinus}
+				/>
+				<MainInput
+					currentItem={currentItem}
+					changeState={this.changeState}
+					handleClickAddButton={this.handleClickAddButton}
+				/>
+				<ListItems
+					for={CONSTANTS.notBought}
+					objToList={objBought}
+					handleCheckboxCheck={this.handleCheckboxCheck}
+					handleClickPlus={this.handleClickPlus}
+					handleClickMinus={this.handleClickMinus}
+				/>
 			</div>
 		);
 	}
