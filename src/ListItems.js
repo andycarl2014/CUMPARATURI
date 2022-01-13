@@ -3,18 +3,19 @@ import Item from './Item';
 import { CONSTANTS } from './CONST';
 export default class ListItems extends Component {
 	render() {
-		const objToList = this.props.objToList;
+		const props = this.props;
+		const objToList = props?.objToList;
 		return (
 			<div
 				className={
-					this.props.for === CONSTANTS.notBought
+					this.props?.for === CONSTANTS.notBought
 						? CONSTANTS.forNotBought
 						: CONSTANTS.forBought
 				}
 			>
 				<h1>
 					{objToList.length}
-					{this.props.for === CONSTANTS.notBought
+					{props?.for === CONSTANTS.notBought
 						? CONSTANTS.notBought
 						: CONSTANTS.bought}
 				</h1>
@@ -22,11 +23,11 @@ export default class ListItems extends Component {
 					// Returns an Item for each uncompleted item in the array
 					return (
 						<Item
-							key={item.key}
+							key={item?.key}
 							item={item}
-							handleCheckboxCheck={this.props.handleCheckboxCheck}
-							handleClickPlus={this.props.handleClickPlus}
-							handleClickMinus={this.props.handleClickMinus}
+							handleCheckboxCheck={props?.handleCheckboxCheck}
+							handleClickPlus={props?.handleClickPlus}
+							handleClickMinus={props?.handleClickMinus}
 						/>
 					);
 				})}

@@ -9,39 +9,40 @@ export default class Item extends Component {
 	};
 	render() {
 		const props = this.props;
+		const item = props.item;
 		return (
 			<div
 				className={
-					props.item.completed ? CONSTANTS.completed : CONSTANTS.unCompleted
+					item?.completed ? CONSTANTS.completed : CONSTANTS.unCompleted
 				} // Sets the className based on the item.completed prop
 			>
 				<input
 					type='checkbox'
-					checked={props.item.completed}
+					checked={item?.completed}
 					onChange={
-						() => props.handleCheckboxCheck(props.item.key)
+						() => props.handleCheckboxCheck(item.key)
 						//Changes the item.completed prop
 					}
 				/>
 				<p
-					style={props.item.completed ? this.completedStyles : null}
+					style={item.completed ? this.completedStyles : null}
 					// If the item is completed it adds the style
 				>
-					{props.item.name} ------- {props.item.quantity} Bucati
+					{item.name} ------- {item.quantity} Bucati
 				</p>
 				<button
-					hidden={props.item.completed} // If the item is completed, hides the + button
+					hidden={item.completed} // If the item is completed, hides the + button
 					onClick={
-						() => props.handleClickPlus(props.item.key)
+						() => props.handleClickPlus(item.key)
 						// Adds the functionality for the + button
 					}
 				>
 					+
 				</button>
 				<button
-					hidden={props.item.completed} // If the item is completed, hides the - button
+					hidden={item.completed} // If the item is completed, hides the - button
 					onClick={
-						() => props.handleClickMinus(props.item.key)
+						() => props.handleClickMinus(item.key)
 						// Adds the functionality for the - button
 					}
 				>
