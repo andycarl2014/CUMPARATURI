@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import ListItems from './ListItems';
+import ListItems from './Components/ListItems';
 import { v4 as uuidv4 } from 'uuid';
 import './style.css';
-import MainInput from './MainInput';
+import MainInput from './Components/MainInput';
 import { CONSTANTS } from './CONST';
+import { DragDropContext } from 'react-beautiful-dnd';
 export default class App extends Component {
 	constructor(props) {
 		super(props);
@@ -21,6 +22,25 @@ export default class App extends Component {
 		this.handleClickMinus = this.handleClickMinus.bind(this);
 		this.changeState = this.changeState.bind(this);
 	}
+
+	afterDrag(result) {
+		if (!result.destination) return;
+		const { source, destination } = result;
+
+		if (source.droppableId !== destination.droppableId) {
+			const oldObj = this.state.obiecte;
+			this.setState(() => {
+				const updatedObjects = oldObj.map((item) => {
+					if (item.key === result.draggableId) {
+						item.completed = !item.completed;
+					}
+					return item;
+				});
+				return { obiecte: updatedObjects };
+			});
+		}
+	}
+
 	handleCheckboxCheck(key) {
 		const oldObj = this.state.obiecte;
 		// Sets the state to completed or not completed based on the last state
@@ -100,6 +120,7 @@ export default class App extends Component {
 		} else alert(CONSTANTS.alerta2);
 	}
 	changeState(e) {
+		// Sets the state of the currentItem based on the event
 		this.setState(() => {
 			let currentItem = this.state.currentItem;
 			currentItem[e.target.id] = e.target.value;
@@ -107,31 +128,40 @@ export default class App extends Component {
 		});
 	}
 	render() {
-		const { obiecte, currentItem } = this.state;
-		const objBought = obiecte.filter((item) => item.completed === true);
-		const objNotBought = obiecte.filter((item) => item.completed === false);
+		const { obiecte, currentItem } = this.state; // State destructuring
+		const HANDLERS = {
+			handleCheckboxCheck: this.handleCheckboxCheck,
+			handleClickPlus: this.handleClickPlus,
+			handleClickMinus: this.handleClickMinus,
+		};
+		const objBought = obiecte.filter((item) => item.completed === true); // Objects that are completed
+		const objNotBought = obiecte.filter((item) => item.completed === false); // Objects that are not completed
 		return (
-			<div className='App'>
-				<ListItems
-					for={CONSTANTS.bought}
-					objToList={objNotBought}
-					handleCheckboxCheck={this.handleCheckboxCheck}
-					handleClickPlus={this.handleClickPlus}
-					handleClickMinus={this.handleClickMinus}
-				/>
-				<MainInput
-					currentItem={currentItem}
-					changeState={this.changeState}
-					handleClickAddButton={this.handleClickAddButton}
-				/>
-				<ListItems
-					for={CONSTANTS.notBought}
-					objToList={objBought}
-					handleCheckboxCheck={this.handleCheckboxCheck}
-					handleClickPlus={this.handleClickPlus}
-					handleClickMinus={this.handleClickMinus}
-				/>
-			</div>
+			<DragDropContext onDragEnd={(result) => this.afterDrag(result)}>
+				<div className='App'>
+					<div className='column left'>
+						<ListItems // Class to list the elements
+							className={CONSTANTS.forNotBought}
+							objToList={objNotBought}
+							HANDLERS={HANDLERS}
+						/>
+					</div>
+					<div className='column middle'>
+						<MainInput // Main Div with input and add button
+							currentItem={currentItem}
+							changeState={this.changeState}
+							handleClickAddButton={this.handleClickAddButton}
+						/>
+					</div>
+					<div className='column right'>
+						<ListItems // Class to list the elements
+							className={CONSTANTS.forBought}
+							objToList={objBought}
+							HANDLERS={HANDLERS}
+						/>
+					</div>
+				</div>
+			</DragDropContext>
 		);
 	}
 }

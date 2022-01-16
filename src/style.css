@@ -1,48 +1,75 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+ul {
+	min-height: 100px;
+	min-width: 100px;
+	list-style: none;
+}
+html,
+body,
+#root,
 .App {
-	background-color: white;
+	height: 100%;
+	background-color: whitesmoke;
+	width: 100%;
+}
+.column {
+	float: left;
+}
+.row {
+	height: 100%;
+	width: 100%;
+}
+.left,
+.right {
+	height: 100%;
+	width: 35%;
+}
+.middle {
+	width: 30%;
+	height: 100%;
+}
+.row:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+.box {
+	height: 80%;
+	width: 80%;
+
 	margin: auto;
-	width: 50%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+	border-radius: 4px 0px 4px 0px;
+	margin-bottom: 25%;
+	border-collapse: separate;
+	vertical-align: middle;
+	overflow-y: auto;
+}
+h1 {
+	text-align: center;
+	padding: 10%;
+}
+.ListItem {
+	height: 80%;
+	width: 100%;
 	border: 1px solid black;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 10px 0 -5px #eee,
-		0 10px 1px -4px rgba(0, 0, 0, 0.15), 0 20px 0 -10px #eee,
-		0 20px 1px -9px rgba(0, 0, 0, 0.15);
-	padding: 30px;
+	border-radius: 25px;
+	margin-top: 20%;
 }
+.alreadyBought,
 .toBuy {
-	height: fit-content;
-	width: fit-content;
+	height: 100%;
+	width: 100%;
 }
-.alreadyBought {
-	height: fit-content;
-	width: 200px;
+.item {
+	margin-top: 5%;
+	width: 90%;
 }
-.uncompletedItem {
-	display: flex;
-	flex-direction: row;
-	margin-bottom: 5px;
-}
-.uncompletedItem input {
-	margin-top: auto;
-	margin-bottom: auto;
-}
+
 .Main {
-	display: flex;
-	flex-direction: column;
-}
-.Main form {
-	display: flex;
-	flex-direction: column;
-}
-.Main form input {
-	margin: 20px;
-}
-.Main form button {
-	background-color: rgb(27, 135, 236);
-	color: white;
-	border: none;
-	width: 50%;
-	margin: auto;
+	height: 100%;
+	width: 100%;
+	padding-top: 20%;
 }
