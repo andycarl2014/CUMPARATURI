@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, TextField } from '@mui/material';
+import { Button, Card, TextField, Typography } from '@mui/material';
 
 export default class MainInput extends Component {
 	render() {
@@ -11,7 +11,17 @@ export default class MainInput extends Component {
 
 		return (
 			<div className='Main'>
-				<Card style={{ paddingTop: '20px' }}>
+				<Card
+					style={{
+						paddingTop: '20px',
+						maxWidth: '80%',
+						margin: 'auto',
+					}}
+					variant='outlined'
+				>
+					<Typography sx={{ fontSize: 25 }} gutterBottom>
+						Adauga elemente !
+					</Typography>
 					<TextField
 						style={{ margin: '20px 20px 20px 20px' }} // Input for Item's name
 						id='name'
@@ -23,6 +33,7 @@ export default class MainInput extends Component {
 						}}
 					/>
 					<br />
+
 					<TextField // Input for Item's quantity
 						id='quantity'
 						type='number'
@@ -36,6 +47,7 @@ export default class MainInput extends Component {
 						variant='outlined'
 						className='buton' // Add button
 						onClick={handleClickAddButton}
+						style={{ marginTop: '5%', marginBottom: '5%' }}
 					>
 						Adauga
 					</Button>

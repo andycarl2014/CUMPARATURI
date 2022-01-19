@@ -1,75 +1,95 @@
 * {
-	box-sizing: border-box;
-	margin: 0;
+	margin: 0px;
+	padding: 0px;
+}
+table {
+	height: 100%;
+	width: 100%;
+	border-collapse: collapse;
+}
+.toBuy ul li div {
+	background-color: #e06377;
+}
+.alreadyBought ul li div {
+	background-color: #82b74b;
+}
+tr {
+	width: 100%;
+	background-color: white;
+}
+th {
+	height: 4%;
+	width: 100%;
 }
 ul {
-	min-height: 100px;
-	min-width: 100px;
 	list-style: none;
+}
+.left,
+.middle {
+	width: 35%;
+	height: 100%;
+	border-right: 10px solid white;
 }
 html,
 body,
 #root,
 .App {
 	height: 100%;
-	background-color: whitesmoke;
 	width: 100%;
 }
-.column {
-	float: left;
-}
-.row {
-	height: 100%;
-	width: 100%;
-}
-.left,
-.right {
-	height: 100%;
-	width: 35%;
-}
-.middle {
-	width: 30%;
-	height: 100%;
-}
-.row:after {
-	content: '';
-	display: table;
-	clear: both;
-}
-.box {
-	height: 80%;
-	width: 80%;
 
-	margin: auto;
-	border-radius: 4px 0px 4px 0px;
-	margin-bottom: 25%;
-	border-collapse: separate;
-	vertical-align: middle;
-	overflow-y: auto;
+.ListItem {
+	height: 100%;
+	width: 100%;
+	margin-top: auto;
 }
 h1 {
+	padding: 10px;
 	text-align: center;
-	padding: 10%;
+	margin-top: 10%;
+	margin-bottom: 5%;
+	border-bottom: 1px solid black;
+}
+.box,
+.toBuy,
+.alreadyBought,
+ul {
+	min-width: 300px;
+	min-height: 500px;
 }
 .ListItem {
-	height: 80%;
-	width: 100%;
-	border: 1px solid black;
-	border-radius: 25px;
-	margin-top: 20%;
+	overflow: auto;
 }
-.alreadyBought,
-.toBuy {
+.Main {
+	text-align: center;
 	height: 100%;
 	width: 100%;
+	margin-top: 10%;
 }
 .item {
-	margin-top: 5%;
-	width: 90%;
+	width: 75%;
+	margin: auto;
+	margin-bottom: 2%;
 }
 
-.Main {
-	height: 100%;
-	width: 100%;
-	padding-top: 20%;
+.typo {
+	color: white;
+	text-shadow: 2px 1px grey;
+}
+.modifyQuantity {
+	border-bottom: 1px solid black;
+}
+.imgQ {
+	width: 50px;
+	height: 50px;
+	opacity: 0.8;
+}
+.imgQ:hover {
+	opacity: 1;
+}
+.buttonMark {
+	color: white !important;
+}
+.buttonMark:hover {
+	font-weight: 600;
 }

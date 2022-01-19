@@ -52,6 +52,7 @@ export default class ListItems extends Component {
 											</Draggable>
 										);
 									})}
+									{provided.placeholder}
 								</ul>
 							)}
 						</Droppable>

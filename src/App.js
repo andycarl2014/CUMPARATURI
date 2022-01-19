@@ -5,6 +5,8 @@ import './style.css';
 import MainInput from './Components/MainInput';
 import { CONSTANTS } from './CONST';
 import { DragDropContext } from 'react-beautiful-dnd';
+import Header from './Components/Header';
+import Footer from './Components/Footer';
 export default class App extends Component {
 	constructor(props) {
 		super(props);
@@ -26,7 +28,7 @@ export default class App extends Component {
 	afterDrag(result) {
 		if (!result.destination) return;
 		const { source, destination } = result;
-
+		console.log(result);
 		if (source.droppableId !== destination.droppableId) {
 			const oldObj = this.state.obiecte;
 			this.setState(() => {
@@ -137,31 +139,48 @@ export default class App extends Component {
 		const objBought = obiecte.filter((item) => item.completed === true); // Objects that are completed
 		const objNotBought = obiecte.filter((item) => item.completed === false); // Objects that are not completed
 		return (
-			<DragDropContext onDragEnd={(result) => this.afterDrag(result)}>
-				<div className='App'>
-					<div className='column left'>
-						<ListItems // Class to list the elements
-							className={CONSTANTS.forNotBought}
-							objToList={objNotBought}
-							HANDLERS={HANDLERS}
-						/>
-					</div>
-					<div className='column middle'>
-						<MainInput // Main Div with input and add button
-							currentItem={currentItem}
-							changeState={this.changeState}
-							handleClickAddButton={this.handleClickAddButton}
-						/>
-					</div>
-					<div className='column right'>
-						<ListItems // Class to list the elements
-							className={CONSTANTS.forBought}
-							objToList={objBought}
-							HANDLERS={HANDLERS}
-						/>
-					</div>
-				</div>
-			</DragDropContext>
+			<div className='App'>
+				<table>
+					<tbody>
+						<tr>
+							<th colSpan='3'>
+								<Header />
+							</th>
+						</tr>
+						<tr>
+							<td className='right'>
+								<MainInput // Main Div with input and add button
+									currentItem={currentItem}
+									changeState={this.changeState}
+									handleClickAddButton={this.handleClickAddButton}
+								/>
+							</td>
+							<DragDropContext onDragEnd={(result) => this.afterDrag(result)}>
+								<td className='left'>
+									<ListItems // Class to list the elements
+										className={CONSTANTS.forNotBought}
+										objToList={objNotBought}
+										HANDLERS={HANDLERS}
+									/>
+								</td>
+
+								<td className='middle'>
+									<ListItems // Class to list the elements
+										className={CONSTANTS.forBought}
+										objToList={objBought}
+										HANDLERS={HANDLERS}
+									/>
+								</td>
+							</DragDropContext>
+						</tr>
+						<tr>
+							<th colSpan='3'>
+								<Footer />
+							</th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		);
 	}
 }
