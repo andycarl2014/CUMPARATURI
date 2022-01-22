@@ -88,15 +88,26 @@ export default class App extends Component {
 
 	handleCheckboxCheck(key) {
 		const oldObj = this.state.objects;
+		const uncompletedObj = oldObj.filter((item) => item.completed === false); // Filters the uncompleted objects
+		let selectedItem;
+		let selectedIndex;
 		// Sets the state to completed or not completed based on the last state
 		this.setState(() => {
-			const updatedObjects = oldObj.map((item) => {
+			const updatedObjects = oldObj.map((item, index) => {
 				if (item.key === key) {
 					// If key of the item in the array is === to the key of the Item to be modified, the completed property is changed
 					item.completed = !item.completed;
+					selectedItem = item;
+					selectedIndex = index;
 				}
 				return item; // Returns the modified item
 			});
+			const [removed] = updatedObjects.splice(selectedIndex, 1);
+			if (selectedItem.completed === true) {
+				updatedObjects.push(removed);
+			} else {
+				updatedObjects.splice(uncompletedObj.length, 0, removed);
+			}
 			return { objects: updatedObjects }; // Returns the modified state with the modified item
 		});
 	}
