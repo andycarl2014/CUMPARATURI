@@ -102,12 +102,12 @@ export default class App extends Component {
 				}
 				return item; // Returns the modified item
 			});
-			const [removed] = updatedObjects.splice(selectedIndex, 1);
+			const [removed] = updatedObjects.splice(selectedIndex, 1); // If the item is moved via button, removes the item and inserts it into array:
 			if (selectedItem.completed === true) {
-				updatedObjects.push(removed);
+				updatedObjects.push(removed); // At last index if the item is moved to Completed list
 			} else {
 				updatedObjects.splice(uncompletedObj.length, 0, removed);
-			}
+			} // At the end of the uncompleted indexes
 			return { objects: updatedObjects }; // Returns the modified state with the modified item
 		});
 	}
