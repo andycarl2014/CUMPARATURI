@@ -4,12 +4,11 @@ import BasicCard from './BasicCard';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 export default class ListItems extends Component {
 	render() {
-		//const {for , objToList, handleCheckboxCheck, handleClickMinus, handleClickPlus}= this.props;
 		const {
 			className,
 			objToList,
 			HANDLERS: { handleCheckboxCheck, handleClickPlus, handleClickMinus },
-		} = this.props;
+		} = this.props; // Props destructuring
 		const classH1 =
 			className === CONSTANTS.forBought
 				? CONSTANTS.bought
@@ -17,7 +16,7 @@ export default class ListItems extends Component {
 
 		return (
 			<div className='ListItem'>
-				<h1>
+				<h1 className='h1Custom'>
 					{objToList.length}
 					{classH1}
 				</h1>
@@ -27,10 +26,9 @@ export default class ListItems extends Component {
 							{(provided) => (
 								<ul {...provided.droppableProps} ref={provided.innerRef}>
 									{objToList.map((item, index) => {
-										// Returns an Item for each uncompleted item in the array
-
+										// Returns an Item for each object in the array
 										return (
-											<Draggable
+											<Draggable // Creates a Draggable object with current props
 												key={item.key}
 												draggableId={item.key}
 												index={index}
@@ -41,7 +39,7 @@ export default class ListItems extends Component {
 														{...provided.draggableProps}
 														{...provided.dragHandleProps}
 													>
-														<BasicCard
+														<BasicCard // Creates a BasicCard with current props
 															item={item}
 															handleCheckboxCheck={handleCheckboxCheck}
 															handleClickPlus={handleClickPlus}

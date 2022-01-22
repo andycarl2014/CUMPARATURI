@@ -11,7 +11,7 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			obiecte: [], // Array with all the objects , bought and not bought
+			objects: [], // Array with all the objects , bought and not bought
 			currentItem: {
 				// Current item to be added in the array
 				name: CONSTANTS.empty,
@@ -24,27 +24,70 @@ export default class App extends Component {
 		this.handleClickMinus = this.handleClickMinus.bind(this);
 		this.changeState = this.changeState.bind(this);
 	}
+	reorder(dragResult, list, startIndex, endIndex) {
+		// Reorders the items in the state objects array in the following order: toBuy objects first, and alreadyBought objects last
+		const { destination, source } = dragResult; // dragResult destructuring
+		const result = Array.from(list); // Saves the list into result, which is going to be modified further
+		const uncompletedObj = result.filter((item) => item.completed === false); // Filters the uncompleted objects
+		let removed;
+		if (destination.droppableId !== source.droppableId) {
+			// If the source and the destination are not the same it means that the item was moved from one list to another
+			if (destination.droppableId === CONSTANTS.forBought) {
+				// The destination's droppableId is the second list
+				[removed] = result.splice(startIndex, 1); // Saves the current item as removed
+				result.splice(endIndex + uncompletedObj.length - 1, 0, removed);
+				// Inserts the removed item at the current endIndex after all the uncompleted items
+			} else {
+				// The destination's droppableId is the first list
+				[removed] = result.splice(startIndex + uncompletedObj.length, 1);
+				// Saves the current item as removed
+				result.splice(endIndex, 0, removed);
+				// Inserts the removed item at the current endIndex
+			}
+		} else {
+			// If the source and the destination are the same it means that the item is being reordered in the same list
+			if (destination.droppableId === CONSTANTS.forBought) {
+				// The destination's droppableId is the second list
+				[removed] = result.splice(startIndex + uncompletedObj.length, 1);
+				// Saves the current item startIndex after the 1st list's elements as removed
+				result.splice(endIndex + uncompletedObj.length, 0, removed);
+				// Inserts the removed item at the current endIndex after the 1st list's elements
+			} else {
+				[removed] = result.splice(startIndex, 1);
+				// Saves the current item as removed
+				result.splice(endIndex, 0, removed);
+				// Inserts the removed item at the current endIndex
+			}
+		}
+		return result; // Returns the current modified array
+	}
+	afterDrag(dragResult) {
+		const oldObj = this.state.objects; // Saves the current state
+		if (!dragResult.destination) return; // If the destination doesn't exist, does nothing
+		const { source, destination } = dragResult; //
 
-	afterDrag(result) {
-		if (!result.destination) return;
-		const { source, destination } = result;
-		console.log(result);
-		if (source.droppableId !== destination.droppableId) {
-			const oldObj = this.state.obiecte;
-			this.setState(() => {
-				const updatedObjects = oldObj.map((item) => {
-					if (item.key === result.draggableId) {
+		const items = this.reorder(
+			dragResult,
+			oldObj,
+			source.index,
+			destination.index
+		); // Saves the reordered oldObj into another array
+		this.setState(() => {
+			if (source.droppableId !== destination.droppableId) {
+				// If the item was moved, changes that item's completed prop
+				const updatedObjects = items.map((item) => {
+					if (item.key === dragResult.draggableId) {
 						item.completed = !item.completed;
 					}
 					return item;
 				});
-				return { obiecte: updatedObjects };
-			});
-		}
+				return { objects: updatedObjects }; // Returns the updated objects after change
+			} else return { objects: items }; // The item was not moved from one list to the other so the completed prop is not changed
+		});
 	}
 
 	handleCheckboxCheck(key) {
-		const oldObj = this.state.obiecte;
+		const oldObj = this.state.objects;
 		// Sets the state to completed or not completed based on the last state
 		this.setState(() => {
 			const updatedObjects = oldObj.map((item) => {
@@ -54,11 +97,11 @@ export default class App extends Component {
 				}
 				return item; // Returns the modified item
 			});
-			return { obiecte: updatedObjects }; // Returns the modified state with the modified item
+			return { objects: updatedObjects }; // Returns the modified state with the modified item
 		});
 	}
 	handleClickPlus(key) {
-		const oldObj = this.state.obiecte;
+		const oldObj = this.state.objects;
 		// Modifies the quantity of the item
 		this.setState(() => {
 			const updatedObjects = oldObj.map((item) => {
@@ -68,11 +111,11 @@ export default class App extends Component {
 				}
 				return item; // Returns the modified item
 			});
-			return { obiecte: updatedObjects }; // Returns the modified state with the modified item
+			return { objects: updatedObjects }; // Returns the modified state with the modified item
 		});
 	}
 	handleClickMinus(key) {
-		const oldObj = this.state.obiecte;
+		const oldObj = this.state.objects;
 		// Modifies the quantity of the item
 		this.setState(() => {
 			const updatedObjects = oldObj.map((item) => {
@@ -87,7 +130,7 @@ export default class App extends Component {
 				// If the quantity of the item is less than 0 it is deleted from the array
 				(item) => item.quantity > 0
 			);
-			return { obiecte: updatedObjects2 }; // Returns the modified state with the modified item
+			return { objects: updatedObjects2 }; // Returns the modified state with the modified item
 		});
 	}
 	clearFields() {
@@ -100,6 +143,9 @@ export default class App extends Component {
 		});
 	}
 	handleClickAddButton() {
+		let oldObj = this.state.objects; // Saves the state objects array
+		const uncompletedObj = oldObj.filter((item) => item.completed === false); // Filters the uncompleted objects
+
 		const itemToAdd = {
 			// Current item from the input fields
 			key: uuidv4(),
@@ -108,14 +154,13 @@ export default class App extends Component {
 			completed: false,
 		};
 		if (
-			this.state.obiecte.filter((item) => item.name === itemToAdd.name)
-				.length === 0 // If the item has not been already added to the array checks the inputs
+			oldObj.filter((item) => item.name === itemToAdd.name).length === 0 // If the item has not been already added to the array checks the inputs
 		) {
 			if (itemToAdd.name !== CONSTANTS.empty && itemToAdd.quantity > 0) {
-				let oldObj = this.state.obiecte;
+				oldObj.splice(uncompletedObj.length, 0, itemToAdd);
 				// If the inputs are completed it adds the item using setState
 				this.setState(() => ({
-					obiecte: [...oldObj, itemToAdd],
+					objects: oldObj,
 				}));
 				this.clearFields();
 			} else alert(CONSTANTS.alerta1);
@@ -130,14 +175,14 @@ export default class App extends Component {
 		});
 	}
 	render() {
-		const { obiecte, currentItem } = this.state; // State destructuring
+		const { objects, currentItem } = this.state; // State destructuring
 		const HANDLERS = {
 			handleCheckboxCheck: this.handleCheckboxCheck,
 			handleClickPlus: this.handleClickPlus,
 			handleClickMinus: this.handleClickMinus,
 		};
-		const objBought = obiecte.filter((item) => item.completed === true); // Objects that are completed
-		const objNotBought = obiecte.filter((item) => item.completed === false); // Objects that are not completed
+		const objBought = objects.filter((item) => item.completed === true); // Objects that are completed
+		const objNotBought = objects.filter((item) => item.completed === false); // Objects that are not completed
 		return (
 			<div className='App'>
 				<table>
@@ -147,7 +192,7 @@ export default class App extends Component {
 								<Header />
 							</th>
 						</tr>
-						<tr>
+						<tr className='trGif'>
 							<td className='right'>
 								<MainInput // Main Div with input and add button
 									currentItem={currentItem}

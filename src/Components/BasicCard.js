@@ -10,7 +10,7 @@ export default class BasicCard extends Component {
 			handleClickMinus,
 			handleClickPlus,
 			handleCheckboxCheck,
-		} = this.props;
+		} = this.props; // Props destructuring
 
 		return (
 			<div className='item'>
@@ -33,10 +33,10 @@ export default class BasicCard extends Component {
 								className='buttonQuantity'
 								onClick={() => handleClickPlus(key)}
 							>
-								<img src={plus} className='imgQ' />
+								<img src={plus} className='imgQ' alt='Button Plus' />
 							</Button>
 							<Button onClick={() => handleClickMinus(key)}>
-								<img src={minus} className='imgQ' />
+								<img src={minus} className='imgQ' alt='Button Minus' />
 							</Button>
 						</Typography>
 						<Typography>
@@ -46,7 +46,10 @@ export default class BasicCard extends Component {
 									handleCheckboxCheck(key);
 								}}
 							>
-								Mark as {completed === false ? ' completed' : 'uncompleted'}
+								Mark as{' '}
+								{completed === false
+									? CONSTANTS.completedForMarkText
+									: CONSTANTS.uncompletedForMarkText}
 							</Button>
 						</Typography>
 					</CardContent>

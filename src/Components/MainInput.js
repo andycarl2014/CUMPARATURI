@@ -11,14 +11,7 @@ export default class MainInput extends Component {
 
 		return (
 			<div className='Main'>
-				<Card
-					style={{
-						paddingTop: '20px',
-						maxWidth: '80%',
-						margin: 'auto',
-					}}
-					variant='outlined'
-				>
+				<Card className='divAddElements' variant='outlined'>
 					<Typography sx={{ fontSize: 25 }} gutterBottom>
 						Adauga elemente !
 					</Typography>
@@ -47,7 +40,7 @@ export default class MainInput extends Component {
 						variant='outlined'
 						className='buton' // Add button
 						onClick={handleClickAddButton}
-						style={{ marginTop: '5%', marginBottom: '5%' }}
+						style={{ marginTop: '10%' }}
 					>
 						Adauga
 					</Button>

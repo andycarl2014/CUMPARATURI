@@ -11,7 +11,7 @@ table {
 	background-color: #e06377;
 }
 .alreadyBought ul li div {
-	background-color: #82b74b;
+	background-color: #343632;
 }
 tr {
 	width: 100%;
@@ -28,14 +28,20 @@ ul {
 .middle {
 	width: 35%;
 	height: 100%;
-	border-right: 10px solid white;
 }
 html,
-body,
 #root,
+body,
 .App {
 	height: 100%;
 	width: 100%;
+}
+
+.trGif {
+	background-image: url('images/3fbq.gif');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 
 .ListItem {
@@ -61,20 +67,21 @@ ul {
 	overflow: auto;
 }
 .Main {
+	display: flex;
 	text-align: center;
 	height: 100%;
 	width: 100%;
-	margin-top: 10%;
 }
 .item {
 	width: 75%;
 	margin: auto;
 	margin-bottom: 2%;
+	min-width: 330px;
 }
 
 .typo {
 	color: white;
-	text-shadow: 2px 1px grey;
+	text-shadow: 1px 1px grey;
 }
 .modifyQuantity {
 	border-bottom: 1px solid black;
@@ -88,8 +95,21 @@ ul {
 	opacity: 1;
 }
 .buttonMark {
+	margin: 0 auto !important;
+	display: flex !important;
 	color: white !important;
 }
 .buttonMark:hover {
 	font-weight: 600;
+}
+
+.h1Custom {
+	width: 90%;
+}
+.divAddElements {
+	padding-top: 10%;
+}
+.footerPage {
+	text-align: center;
+	margin: 0 auto !important;
 }
