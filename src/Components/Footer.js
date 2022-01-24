@@ -1,7 +1,7 @@
 import { AppBar, Container, Toolbar, Typography } from '@mui/material';
 import React, { Component } from 'react';
 import { Box } from '@mui/system';
-
+import { CONSTANTS } from '../CONST';
 export default class Footer extends Component {
 	render() {
 		return (
@@ -14,7 +14,7 @@ export default class Footer extends Component {
 								color='inherit'
 								className='footerPage'
 							>
-								© 2022 Constantin Dragos Gabriel
+								{CONSTANTS.footer}
 							</Typography>
 						</Toolbar>
 					</Container>

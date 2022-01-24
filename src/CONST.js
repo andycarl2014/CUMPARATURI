@@ -9,6 +9,9 @@ const CONSTANTS = {
 	unCompleted: 'uncompletedItem',
 	completedForMarkText: ' completed',
 	uncompletedForMarkText: ' uncompleted',
+	title:'CUMPARATURI',
+	footer:'© 2022 Constantin Dragos Gabriel',
 	empty: '',
+
 };
 export { CONSTANTS };
