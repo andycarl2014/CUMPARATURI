@@ -77,16 +77,45 @@ class App extends Component {
       source.index,
       destination.index,
     ); // Saves the reordered oldObj into another array
-    this.setState(() => {
-      if (source.droppableId !== destination.droppableId) {
-        // If the item was moved, changes that item's completed prop
-        const updatedObjects = items.map((item) => {
-          if (item.key === dragResult.draggableId) {
-            item.completed = !item.completed;
-            currentItem = item;
-          }
-          return item;
-        });
+    this.props.snackbarShowMessage(
+      `Ati modificat starea elementului cu numele: ${currentItem.name} 
+      Elementul este acum:${
+        currentItem.completed ? 'completat' : 'necompletat'
+      }`,
+      'info',
+      5000,
+    );
+    let newObj;
+    if (source.droppableId !== destination.droppableId) {
+      // If the item was moved, changes that item's completed prop
+      const updatedObjects = items.map((item) => {
+        if (item.key === dragResult.draggableId) {
+          item.completed = !item.completed;
+          currentItem = item;
+        }
+        return item;
+      });
+
+      newObj = updatedObjects; // Returns the updated objects after change
+    } else newObj = items; // The item was not moved from one list to the other so the completed prop is not changed
+
+    this.setState({ objects: newObj });
+  }
+
+  handleCheckboxCheck(key) {
+    const oldObj = this.state.objects;
+    const uncompletedObj = oldObj.filter((item) => item.completed === false); // Filters the uncompleted objects
+    let currentItem;
+    let selectedIndex;
+    let newObj;
+    // Sets the state to completed or not completed based on the last state
+
+    const updatedObjects = oldObj.map((item, index) => {
+      if (item.key === key) {
+        // If key of the item in the array is === to the key of the Item to be modified, the completed property is changed
+        item.completed = !item.completed;
+        currentItem = item;
+        selectedIndex = index;
         this.props.snackbarShowMessage(
           `Ati modificat starea elementului cu numele: ${currentItem.name} 
           Elementul este acum:${
@@ -95,112 +124,87 @@ class App extends Component {
           'info',
           5000,
         );
-        return { objects: updatedObjects }; // Returns the updated objects after change
-      } else return { objects: items }; // The item was not moved from one list to the other so the completed prop is not changed
+      }
+      return item; // Returns the modified item
     });
-  }
+    const [removed] = updatedObjects.splice(selectedIndex, 1); // If the item is moved via button, removes the item and inserts it into array:
+    if (currentItem.completed === true) {
+      updatedObjects.push(removed); // At last index if the item is moved to Completed list
+    } else {
+      updatedObjects.splice(uncompletedObj.length, 0, removed);
+    } // At the end of the uncompleted indexes
+    newObj = updatedObjects; // Returns the modified state with the modified item
 
-  handleCheckboxCheck(key) {
-    const oldObj = this.state.objects;
-    const uncompletedObj = oldObj.filter((item) => item.completed === false); // Filters the uncompleted objects
-    let currentItem;
-    let selectedIndex;
-    // Sets the state to completed or not completed based on the last state
-    this.setState(() => {
-      const updatedObjects = oldObj.map((item, index) => {
-        if (item.key === key) {
-          // If key of the item in the array is === to the key of the Item to be modified, the completed property is changed
-          item.completed = !item.completed;
-          currentItem = item;
-          selectedIndex = index;
-          this.props.snackbarShowMessage(
-            `Ati modificat starea elementului cu numele: ${currentItem.name} 
-            Elementul este acum:${
-              currentItem.completed ? 'completat' : 'necompletat'
-            }`,
-            'info',
-            5000,
-          );
-        }
-        return item; // Returns the modified item
-      });
-      const [removed] = updatedObjects.splice(selectedIndex, 1); // If the item is moved via button, removes the item and inserts it into array:
-      if (currentItem.completed === true) {
-        updatedObjects.push(removed); // At last index if the item is moved to Completed list
-      } else {
-        updatedObjects.splice(uncompletedObj.length, 0, removed);
-      } // At the end of the uncompleted indexes
-      return { objects: updatedObjects }; // Returns the modified state with the modified item
-    });
+    this.setState({ objects: newObj });
   }
   handleClickPlus(key) {
     const oldObj = this.state.objects;
     let currentItem;
     // Modifies the quantity of the item
-    this.setState(() => {
-      const updatedObjects = oldObj.map((item) => {
-        if (item.key === key) {
-          currentItem = item;
-          // If key of the item in the array is === to the key of the Item to be modified
-          item.quantity = item.quantity + 1;
-          this.props.snackbarShowMessage(
-            `Ati modificat elementul cu numele: ${currentItem.name} 
-            Cantitate noua:${currentItem.quantity}`,
-            'info',
-            5000,
-          ); // Increases quantity by 1
-        }
-        return item; // Returns the modified item
-      });
-      return { objects: updatedObjects }; // Returns the modified state with the modified item
+
+    const updatedObjects = oldObj.map((item) => {
+      if (item.key === key) {
+        currentItem = item;
+        // If key of the item in the array is === to the key of the Item to be modified
+        item.quantity = item.quantity + 1;
+        this.props.snackbarShowMessage(
+          `Ati modificat elementul cu numele: ${currentItem.name} 
+          Cantitate noua:${currentItem.quantity}`,
+          'info',
+          5000,
+        ); // Increases quantity by 1
+      }
+      return item; // Returns the modified item
     });
+    const newObj = updatedObjects; // Returns the modified state with the modified item
+
+    this.setState({ objects: newObj });
   }
   handleClickMinus(key) {
     const oldObj = this.state.objects;
     let currentItem;
     let removedItem;
     // Modifies the quantity of the item
-    this.setState(() => {
-      const updatedObjects = oldObj.map((item) => {
-        if (item.key === key) {
-          currentItem = item;
 
-          // If key of the item in the array is === to the key of the Item to be modified
-          item.quantity = item.quantity - 1;
-          if (item.quantity > 0) {
-            this.props.snackbarShowMessage(
-              `Ati modificat elementul cu numele: ${currentItem.name} 
-            Cantitate noua:${currentItem.quantity}`,
-              'info',
-              5000,
-            );
-          } else {
-            removedItem = item;
-            this.props.snackbarShowMessage(
-              `Ati sters elementul cu numele: ${removedItem.name}`,
-              'warning',
-              5000,
-            );
-          } // Decreases quantity by 1
-        }
+    const updatedObjects = oldObj.map((item) => {
+      if (item.key === key) {
+        currentItem = item;
 
-        return item; // Returns the modified item
-      });
-      const updatedObjects2 = updatedObjects.filter(
-        // If the quantity of the item is less than 0 it is deleted from the array
-        (item) => item.quantity > 0,
-      );
-      return { objects: updatedObjects2 }; // Returns the modified state with the modified item
+        // If key of the item in the array is === to the key of the Item to be modified
+        item.quantity = item.quantity - 1;
+        if (item.quantity > 0) {
+          this.props.snackbarShowMessage(
+            `Ati modificat elementul cu numele: ${currentItem.name} 
+          Cantitate noua:${currentItem.quantity}`,
+            'info',
+            5000,
+          );
+        } else {
+          removedItem = item;
+          this.props.snackbarShowMessage(
+            `Ati sters elementul cu numele: ${removedItem.name}`,
+            'warning',
+            5000,
+          );
+        } // Decreases quantity by 1
+      }
+
+      return item; // Returns the modified item
     });
+    const updatedObjects2 = updatedObjects.filter(
+      // If the quantity of the item is less than 0 it is deleted from the array
+      (item) => item.quantity > 0,
+    );
+    const newObj = updatedObjects2; // Returns the modified state with the modified item
+
+    this.setState({ objects: newObj });
   }
   clearFields() {
-    this.setState(() => {
-      // Resets the state of currentItem to clear input fields
-      let currentItem = this.state?.currentItem;
-      currentItem.name = CONSTANTS.empty;
-      currentItem.quantity = CONSTANTS.empty;
-      return { currentItem };
-    });
+    let currentItem = this.state?.currentItem;
+    currentItem.name = CONSTANTS.empty;
+    currentItem.quantity = CONSTANTS.empty;
+    // Resets the state of currentItem to clear input fields
+    this.setState({ currentItem: currentItem });
   }
   handleClickAddButton() {
     let oldObj = this.state.objects; // Saves the state objects array
@@ -218,9 +222,9 @@ class App extends Component {
       if (itemToAdd.name !== CONSTANTS.empty && itemToAdd.quantity > 0) {
         oldObj.splice(uncompletedObj.length, 0, itemToAdd);
         // If the inputs are completed it adds the item using setState
-        this.setState(() => ({
+        this.setState({
           objects: oldObj,
-        }));
+        });
         this.props.snackbarShowMessage(
           `Ati adaugat un element nou!
           Nume: ${itemToAdd.name} 
@@ -234,11 +238,9 @@ class App extends Component {
   }
   changeState(e) {
     // Sets the state of the currentItem based on the event
-    this.setState(() => {
-      let currentItem = this.state.currentItem;
-      currentItem[e.target.id] = e.target.value;
-      return { currentItem };
-    });
+    let currentItem = this.state.currentItem;
+    currentItem[e.target.id] = e.target.value;
+    this.setState({ currentItem: currentItem });
   }
   render() {
     const { objects, currentItem } = this.state; // State destructuring

@@ -13,7 +13,8 @@ export const withSnackbar = (WrappedComponent) => {
         severity: 'success',
       };
     }
-    handleClose = () => {
+    handleClose = (event, reason) => {
+      if (reason === 'clickaway') return;
       this.setState({ ...this.state, open: false });
     };
     showMessage = (message, severity, duration = 2000) => {
