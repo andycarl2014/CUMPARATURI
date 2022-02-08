@@ -1,30 +1,29 @@
+// Library imports
 import React, { Component } from 'react';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+
+//Custom imports
 import { CONSTANTS } from '../CONST';
 import BasicCard from './BasicCard';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { ListItem, H1Custom, ListItemBox, CardDiv, CustomUl } from './styles';
+
 export default class ListItems extends Component {
   render() {
-    const {
-      className,
-      objToList,
-      HANDLERS: { handleCheckboxCheck, handleClickPlus, handleClickMinus },
-      snackbarShowMessage,
-    } = this.props; // Props destructuring
+    const { listName, objToList, HANDLERS } = this.props; // Props destructuring
     const classH1 =
-      className === CONSTANTS.forBought
-        ? CONSTANTS.bought
-        : CONSTANTS.notBought;
+      listName === CONSTANTS.forBought ? CONSTANTS.bought : CONSTANTS.notBought;
+
     return (
-      <div className='ListItem'>
-        <h1 className='h1Custom'>
+      <ListItem>
+        <H1Custom>
           {objToList.length}
           {classH1}
-        </h1>
-        <div className='box'>
-          <div className={className}>
-            <Droppable droppableId={className}>
+        </H1Custom>
+        <ListItemBox>
+          <CardDiv>
+            <Droppable droppableId={listName}>
               {(provided) => (
-                <ul {...provided.droppableProps} ref={provided.innerRef}>
+                <CustomUl {...provided.droppableProps} ref={provided.innerRef}>
                   {objToList.map((item, index) => {
                     // Returns an Item for each object in the array
                     return (
@@ -39,10 +38,7 @@ export default class ListItems extends Component {
                             {...provided.dragHandleProps}>
                             <BasicCard // Creates a BasicCard with current props
                               item={item}
-                              handleCheckboxCheck={handleCheckboxCheck}
-                              handleClickPlus={handleClickPlus}
-                              handleClickMinus={handleClickMinus}
-                              snackbarShowMessage={snackbarShowMessage}
+                              HANDLERS={HANDLERS}
                             />
                           </li>
                         )}
@@ -50,12 +46,12 @@ export default class ListItems extends Component {
                     );
                   })}
                   {provided.placeholder}
-                </ul>
+                </CustomUl>
               )}
             </Droppable>
-          </div>
-        </div>
-      </div>
+          </CardDiv>
+        </ListItemBox>
+      </ListItem>
     );
   }
 }

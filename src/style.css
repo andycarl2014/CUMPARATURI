@@ -1,18 +1,9 @@
-* {
-  margin: 0px;
-  padding: 0px;
-}
 table {
   height: 100%;
   width: 100%;
   border-collapse: collapse;
 }
-.toBuy ul li div {
-  background-color: #e06377;
-}
-.alreadyBought ul li div {
-  background-color: #343632;
-}
+
 tr {
   width: 100%;
   background-color: white;
@@ -21,9 +12,7 @@ th {
   height: 4%;
   width: 100%;
 }
-ul {
-  list-style: none;
-}
+
 .left,
 .middle {
   width: 35%;
@@ -44,74 +33,11 @@ body,
   background-size: cover;
 }
 
-.ListItem {
-  height: 100%;
-  width: 100%;
-  margin-top: auto;
-}
-h1 {
-  padding: 10px;
-  text-align: center;
-  margin-top: 10%;
-  margin-bottom: 5%;
-  border-bottom: 1px solid black;
-}
-.box,
-.toBuy,
-.alreadyBought,
-ul {
-  min-width: 300px;
-  min-height: 500px;
-}
-.ListItem {
-  overflow: auto;
-}
 .Main {
   display: flex;
   text-align: center;
   height: 100%;
   width: 100%;
-}
-.item {
-  width: 75%;
-  margin: auto;
-  margin-bottom: 2%;
-  min-width: 330px;
-}
-
-.typo {
-  color: white;
-  text-shadow: 1px 1px grey;
-}
-.modifyQuantity {
-  border-bottom: 1px solid black;
-}
-.imgQ {
-  width: 50px;
-  height: 50px;
-  opacity: 0.8;
-}
-.imgQ:hover {
-  opacity: 1;
-}
-.buttonMark {
-  margin: 0 auto !important;
-  display: flex !important;
-  color: white !important;
-}
-.buttonMark:hover {
-  font-weight: 600;
-}
-
-.h1Custom {
-  width: 90%;
-}
-.divAddElements {
-  padding-top: 10%;
-}
-.footerPage {
-  text-align: center;
-  margin: 0 auto !important;
 }
 
 ::-webkit-scrollbar-track {

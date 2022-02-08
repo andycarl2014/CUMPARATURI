@@ -1,21 +1,23 @@
-import { AppBar, Container, Toolbar, Typography } from '@mui/material';
+// Library imports
+import { Container, Toolbar } from '@mui/material';
 import React, { Component } from 'react';
 import { Box } from '@mui/system';
+
+//Custom imports
 import { CONSTANTS } from '../CONST';
+import { AppBarCustom, TypographyCustom } from './styles';
 
 export default class Header extends Component {
   render() {
     return (
-      <Box sx={{ flexGrow: 1 }} className='header'>
-        <AppBar position='static'>
-          <Container maxWidth='md'>
+      <Box>
+        <AppBarCustom>
+          <Container>
             <Toolbar>
-              <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                {CONSTANTS.title}
-              </Typography>
+              <TypographyCustom>{CONSTANTS.title}</TypographyCustom>
             </Toolbar>
           </Container>
-        </AppBar>
+        </AppBarCustom>
       </Box>
     );
   }

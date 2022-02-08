@@ -1,67 +1,70 @@
-import { Button, Card, CardContent, Typography } from '@mui/material';
+// Library imports
+import { Button, CardContent, Typography } from '@mui/material';
+import React, { Component } from 'react';
+
+// Custom imports
 import plus from '../images/plus.png';
 import minus from '../images/minus.png';
-import React, { Component } from 'react';
 import { CONSTANTS } from '../CONST';
+import {
+  DivItem,
+  ImgBtn,
+  TypographyBasicCard,
+  TypographyBasicCardModifyQ,
+  CustomCardCompleted,
+  CustomCardUncompleted,
+  ButtonMark,
+} from './styles';
+
 export default class BasicCard extends Component {
   componentWillUnmount() {
     let currentItem = this.props.item;
     if (currentItem.quantity === 0)
-      this.props.snackbarShowMessage(
+      this.props.HANDLERS?.snackbarShowMessage(
         `Elementul cu numele ${currentItem.name} a fost sters!`,
         'warning',
         2000,
       );
   }
   render() {
+    let CustomCard;
+
     const {
       item: { key, name, quantity, completed },
-      handleClickMinus,
-      handleClickPlus,
-      handleCheckboxCheck,
-      snackbarShowMessage,
+      HANDLERS: { handleClickMinus, handleClickPlus, handleCheckboxCheck },
     } = this.props; // Props destructuring
-
+    if (completed === false) CustomCard = CustomCardCompleted;
+    else CustomCard = CustomCardUncompleted;
     return (
-      <div className='item'>
-        <Card sx={{ minWidth: 100 }}>
+      <DivItem>
+        <CustomCard>
           <CardContent>
-            <Typography sx={{ fontSize: 25 }} className='typo' gutterBottom>
-              Name: {name}
-            </Typography>
+            <TypographyBasicCard>Name: {name}</TypographyBasicCard>
 
-            <Typography sx={{ fontSize: 25 }} className='typo' gutterBottom>
-              Quantity: {quantity}
-            </Typography>
-            <Typography
-              sx={{ fontSize: 20 }}
-              className='typo modifyQuantity'
-              gutterBottom>
+            <TypographyBasicCard>Quantity: {quantity}</TypographyBasicCard>
+            <TypographyBasicCardModifyQ>
               Modify Quantity:
-              <Button
-                className='buttonQuantity'
-                onClick={() => handleClickPlus(key)}>
-                <img src={plus} className='imgQ' alt='Button Plus' />
+              <Button onClick={() => handleClickPlus(key)}>
+                <ImgBtn src={plus} alt='Button Plus' />
               </Button>
               <Button onClick={() => handleClickMinus(key)}>
-                <img src={minus} className='imgQ' alt='Button Minus' />
+                <ImgBtn src={minus} alt='Button Minus' />
               </Button>
-            </Typography>
+            </TypographyBasicCardModifyQ>
             <Typography>
-              <Button
-                className='buttonMark'
+              <ButtonMark
                 onClick={() => {
                   handleCheckboxCheck(key);
                 }}>
-                Mark as{' '}
+                Mark as
                 {completed === false
                   ? CONSTANTS.completedForMarkText
                   : CONSTANTS.uncompletedForMarkText}
-              </Button>
+              </ButtonMark>
             </Typography>
           </CardContent>
-        </Card>
-      </div>
+        </CustomCard>
+      </DivItem>
     );
   }
 }

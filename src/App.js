@@ -1,18 +1,36 @@
+// Library imports
 import React, { Component } from 'react';
-import ListItems from './Components/ListItems';
-import { v4 as uuidv4 } from 'uuid';
-import './style.css';
-import MainInput from './Components/MainInput';
-import { CONSTANTS } from './CONST';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Header from './Components/Header';
-import Footer from './Components/Footer';
-import { withSnackbar } from './Components/higherOrderComponent';
+import { v4 as uuidv4 } from 'uuid';
+
+//Custom imports
+import { CONSTANTS } from './CONST';
+import {
+  Header,
+  Footer,
+  ListItems,
+  withSnackbar,
+  MainInput,
+} from './Components/exports';
+import {
+  CustomApp,
+  CustomTable,
+  CustomTh,
+  CustomTr,
+  CustomTrGif,
+  CustomTd,
+} from './Components/styles';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      objects: [], // Array with all the objects , bought and not bought
+      objects: [
+        { completed: false, key: '1', name: '1', quantity: 1 },
+        { completed: true, key: '2', name: '2', quantity: 2 },
+        { completed: false, key: '3', name: '3', quantity: 3 },
+        { completed: true, key: '4', name: '4', quantity: 4 },
+      ], // Array with all the objects , bought and not bought
       currentItem: {
         // Current item to be added in the array
         name: CONSTANTS.empty,
@@ -71,33 +89,44 @@ class App extends Component {
     if (!dragResult.destination) return; // If the destination doesn't exist, does nothing
     const { source, destination } = dragResult; //
     let currentItem;
+
     const items = this.reorder(
       dragResult,
       oldObj,
       source.index,
       destination.index,
     ); // Saves the reordered oldObj into another array
-    this.props.snackbarShowMessage(
-      `Ati modificat starea elementului cu numele: ${currentItem.name} 
-      Elementul este acum:${
-        currentItem.completed ? 'completat' : 'necompletat'
-      }`,
-      'info',
-      5000,
-    );
     let newObj;
+    [currentItem] = items.filter((item) => item.key === dragResult.draggableId);
+
     if (source.droppableId !== destination.droppableId) {
       // If the item was moved, changes that item's completed prop
       const updatedObjects = items.map((item) => {
         if (item.key === dragResult.draggableId) {
           item.completed = !item.completed;
           currentItem = item;
+          this.props.snackbarShowMessage(
+            `Ati modificat starea elementului cu numele: ${currentItem.name} 
+            Elementul este acum:${
+              currentItem.completed ? 'completat' : 'necompletat'
+            }`,
+            'info',
+            5000,
+          );
         }
         return item;
       });
 
       newObj = updatedObjects; // Returns the updated objects after change
-    } else newObj = items; // The item was not moved from one list to the other so the completed prop is not changed
+    } else {
+      newObj = items;
+      this.props.snackbarShowMessage(
+        `Ati modificat ordinea elementului cu numele: ${currentItem.name} 
+        `,
+        'info',
+        5000,
+      );
+    } // The item was not moved from one list to the other so the completed prop is not changed
 
     this.setState({ objects: newObj });
   }
@@ -236,10 +265,10 @@ class App extends Component {
       } else alert(CONSTANTS.alerta1);
     } else alert(CONSTANTS.alerta2);
   }
-  changeState(e) {
+  changeState(event) {
     // Sets the state of the currentItem based on the event
     let currentItem = this.state.currentItem;
-    currentItem[e.target.id] = e.target.value;
+    currentItem[event.target.id] = event.target.value;
     this.setState({ currentItem: currentItem });
   }
   render() {
@@ -248,20 +277,21 @@ class App extends Component {
       handleCheckboxCheck: this.handleCheckboxCheck,
       handleClickPlus: this.handleClickPlus,
       handleClickMinus: this.handleClickMinus,
+      snackbarShowMessage: this.props.snackbarShowMessage,
     };
     const objBought = objects.filter((item) => item.completed === true); // Objects that are completed
     const objNotBought = objects.filter((item) => item.completed === false); // Objects that are not completed
 
     return (
-      <div className='App'>
-        <table>
+      <CustomApp>
+        <CustomTable>
           <tbody>
-            <tr>
-              <th colSpan='3'>
+            <CustomTr>
+              <CustomTh colSpan='3'>
                 <Header />
-              </th>
-            </tr>
-            <tr className='trGif'>
+              </CustomTh>
+            </CustomTr>
+            <CustomTrGif>
               <td className='right'>
                 <MainInput // Main Div with input and add button
                   currentItem={currentItem}
@@ -270,33 +300,31 @@ class App extends Component {
                 />
               </td>
               <DragDropContext onDragEnd={(result) => this.afterDrag(result)}>
-                <td className='left'>
+                <CustomTd>
                   <ListItems // Class to list the elements
-                    className={CONSTANTS.forNotBought}
+                    listName={CONSTANTS.forNotBought}
                     objToList={objNotBought}
                     HANDLERS={HANDLERS}
-                    snackbarShowMessage={this.props.snackbarShowMessage}
                   />
-                </td>
+                </CustomTd>
 
-                <td className='middle'>
+                <CustomTd>
                   <ListItems // Class to list the elements
-                    className={CONSTANTS.forBought}
+                    listName={CONSTANTS.forBought}
                     objToList={objBought}
                     HANDLERS={HANDLERS}
-                    snackbarShowMessage={this.props.snackbarShowMessage}
                   />
-                </td>
+                </CustomTd>
               </DragDropContext>
-            </tr>
-            <tr>
-              <th colSpan='3'>
+            </CustomTrGif>
+            <CustomTr>
+              <CustomTh colSpan='3'>
                 <Footer />
-              </th>
-            </tr>
+              </CustomTh>
+            </CustomTr>
           </tbody>
-        </table>
-      </div>
+        </CustomTable>
+      </CustomApp>
     );
   }
 }

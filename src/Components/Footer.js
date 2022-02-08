@@ -1,23 +1,23 @@
-import { AppBar, Container, Toolbar, Typography } from '@mui/material';
+// Library imports
+import { Container, Toolbar } from '@mui/material';
 import React, { Component } from 'react';
 import { Box } from '@mui/system';
+
+//Custom imports
 import { CONSTANTS } from '../CONST';
+import { AppBarCustom, TypographyCustom } from './styles';
+
 export default class Footer extends Component {
   render() {
     return (
-      <Box sx={{ flexGrow: 1 }} className='footer'>
-        <AppBar position='static' color='primary'>
-          <Container maxWidth='md'>
+      <Box>
+        <AppBarCustom>
+          <Container>
             <Toolbar>
-              <Typography
-                variant='body1'
-                color='inherit'
-                className='footerPage'>
-                {CONSTANTS.footer}
-              </Typography>
+              <TypographyCustom>{CONSTANTS.footer}</TypographyCustom>
             </Toolbar>
           </Container>
-        </AppBar>
+        </AppBarCustom>
       </Box>
     );
   }

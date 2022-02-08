@@ -1,5 +1,7 @@
+// Library imports
 import React from 'react';
 import { Snackbar, Alert } from '@mui/material';
+
 export const withSnackbar = (WrappedComponent) => {
   class HOC extends React.Component {
     constructor(props) {
