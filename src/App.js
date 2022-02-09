@@ -40,7 +40,7 @@ class App extends Component {
     this.handleClickAddButton = this.handleClickAddButton.bind(this);
     this.handleClickPlus = this.handleClickPlus.bind(this);
     this.handleClickMinus = this.handleClickMinus.bind(this);
-    this.changeState = this.changeState.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -174,7 +174,7 @@ class App extends Component {
       if (item.key === key) {
         currentItem = item;
         // If key of the item in the array is === to the key of the Item to be modified
-        item.quantity = item.quantity + 1;
+        item.quantity = parseInt(item.quantity) + 1;
         this.props.snackbarShowMessage(
           `Ati modificat elementul cu numele: ${currentItem.name} 
           Cantitate noua:${currentItem.quantity}`,
@@ -283,16 +283,17 @@ class App extends Component {
       quantity_error_text: quantityErr,
     });
   }
-  changeState(event) {
+  handleChange(e) {
     // Sets the state of the currentItem based on the event
-    let currentItem = this.state.currentItem;
+    const { name, value } = e.target;
+    const { objects, currentItem } = this.state;
     let errorField;
-    currentItem[event.target.id] = event.target.value;
-    if (event.target.id === 'name') errorField = 'name_error_text';
+    if (name === 'name') errorField = 'name_error_text';
     else errorField = 'quantity_error_text'; // Removes error of the selected input
     this.setState({
       ...this.state,
-      currentItem: currentItem,
+      objects: objects,
+      currentItem: { ...currentItem, [name]: value },
       [errorField]: CONSTANTS.empty,
     });
   }
@@ -323,7 +324,7 @@ class App extends Component {
                   currentItem={currentItem}
                   name_error_text={name_error_text}
                   quantity_error_text={quantity_error_text}
-                  changeState={this.changeState}
+                  handleChange={this.handleChange}
                   handleClickAddButton={this.handleClickAddButton}
                 />
               </td>

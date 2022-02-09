@@ -6,7 +6,7 @@ const DivItem = styled.div`
   && {
     width: 75%;
     margin: auto;
-    margin-bottom: 2%;
+    margin-bottom: 2em;
     min-width: 330px;
   }
 `;
@@ -75,8 +75,8 @@ const H1Custom = styled.h1`
     width: 90%;
     padding: 10px;
     text-align: center;
-    margin-top: 10%;
-    margin-bottom: 5%;
+    margin-top: 2em;
+    margin-bottom: 2em;
     border-bottom: 1px solid black;
   }
 `;
@@ -107,12 +107,11 @@ const Main = styled.div`
 `;
 const CustomTextField = styled(TextField)`
   && {
-    margin: 20px 20px 20px 20px;
+    margin: 1em;
   }
 `;
 const ButtonAdd = styled(Button)`
   && {
-    margintop: '10%';
     border: 1px solid blue;
     padding: 2.5% 5%;
   }

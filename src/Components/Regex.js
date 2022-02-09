@@ -1,7 +1,5 @@
 const validateName = (name) => {
   const regexName = new RegExp('^[0-9a-zA-Z ]*$');
-  console.log(name);
-  console.log(regexName.test(name));
   return regexName.test(name);
 };
 // Name must contain only letters, numbers and space

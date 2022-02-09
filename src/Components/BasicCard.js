@@ -28,7 +28,6 @@ export default class BasicCard extends Component {
   }
   render() {
     let CustomCard;
-
     const {
       item: { key, name, quantity, completed },
       HANDLERS: { handleClickMinus, handleClickPlus, handleCheckboxCheck },

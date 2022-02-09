@@ -13,7 +13,7 @@ export default class MainInput extends Component {
   render() {
     const {
       currentItem: { name, quantity },
-      changeState,
+      handleChange,
       handleClickAddButton,
       name_error_text,
       quantity_error_text,
@@ -29,7 +29,7 @@ export default class MainInput extends Component {
             label='Name'
             type='text'
             value={name}
-            onChange={changeState}
+            onChange={handleChange}
             error={name_error_text === CONSTANTS.empty ? false : true}
             helperText={name_error_text}
           />
@@ -41,7 +41,7 @@ export default class MainInput extends Component {
             type='text'
             label='Quantity'
             value={quantity}
-            onChange={changeState}
+            onChange={handleChange}
             error={quantity_error_text === CONSTANTS.empty ? false : true}
             helperText={quantity_error_text}
           />
