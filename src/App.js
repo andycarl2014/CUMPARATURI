@@ -11,6 +11,8 @@ import {
   ListItems,
   withSnackbar,
   MainInput,
+  validateName,
+  validateQuantity,
 } from './Components/exports';
 import {
   CustomApp,
@@ -25,17 +27,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      objects: [
-        { completed: false, key: '1', name: '1', quantity: 1 },
-        { completed: true, key: '2', name: '2', quantity: 2 },
-        { completed: false, key: '3', name: '3', quantity: 3 },
-        { completed: true, key: '4', name: '4', quantity: 4 },
-      ], // Array with all the objects , bought and not bought
+      objects: [], // Array with all the objects , bought and not bought
       currentItem: {
         // Current item to be added in the array
         name: CONSTANTS.empty,
         quantity: CONSTANTS.empty,
       },
+      name_error_text: CONSTANTS.empty,
+      quantity_error_text: CONSTANTS.empty,
     };
     this.handleCheckboxCheck = this.handleCheckboxCheck.bind(this);
     this.handleClickAddButton = this.handleClickAddButton.bind(this);
@@ -236,43 +235,70 @@ class App extends Component {
     this.setState({ currentItem: currentItem });
   }
   handleClickAddButton() {
+    let oldState = this.state;
+    let nameErr = CONSTANTS.empty;
+    let quantityErr = CONSTANTS.empty;
     let oldObj = this.state.objects; // Saves the state objects array
-    const uncompletedObj = oldObj.filter((item) => item.completed === false); // Filters the uncompleted objects
+    const uncompletedObjNumber = oldObj.filter(
+      (item) => item.completed === false,
+    ).length; // Filters the uncompleted objects
     const itemToAdd = {
       // Current item from the input fields
       key: uuidv4(),
-      name: this.state.currentItem?.name,
-      quantity: parseInt(this.state.currentItem?.quantity) || 0,
+      name: this.state.currentItem?.name || CONSTANTS.empty,
+      quantity: this.state.currentItem?.quantity || CONSTANTS.empty,
       completed: false,
     };
-    if (
-      oldObj.filter((item) => item.name === itemToAdd.name).length === 0 // If the item has not been already added to the array checks the inputs
-    ) {
-      if (itemToAdd.name !== CONSTANTS.empty && itemToAdd.quantity > 0) {
-        oldObj.splice(uncompletedObj.length, 0, itemToAdd);
-        // If the inputs are completed it adds the item using setState
-        this.setState({
-          objects: oldObj,
-        });
-        this.props.snackbarShowMessage(
-          `Ati adaugat un element nou!
-          Nume: ${itemToAdd.name} 
-          Cantitate:${itemToAdd.quantity}`,
-          'success',
-          5000,
-        );
-        this.clearFields();
-      } else alert(CONSTANTS.alerta1);
-    } else alert(CONSTANTS.alerta2);
+    if (itemToAdd.name === CONSTANTS.empty) nameErr = CONSTANTS.emptyField;
+    // Checks if name input is empty
+    else if (!validateName(itemToAdd.name)) nameErr = CONSTANTS.invalidName;
+    // Checks if name input is valid
+    if (itemToAdd.quantity === CONSTANTS.empty)
+      quantityErr = CONSTANTS.emptyField;
+    // Checks if quantity input is empty
+    else if (!validateQuantity(itemToAdd.quantity))
+      quantityErr = CONSTANTS.invalidQuantity;
+    //Checks if quantity input is valid
+
+    if (oldObj.filter((item) => item.name === itemToAdd.name).length !== 0)
+      nameErr = CONSTANTS.nameAlreadyUsed;
+    // Checks if name input is already used
+
+    if (nameErr === CONSTANTS.empty && quantityErr === CONSTANTS.empty) {
+      // If there was no error, adds the current Item and shows success message
+      oldObj.splice(uncompletedObjNumber, 0, itemToAdd);
+      this.props.snackbarShowMessage(
+        `Ati adaugat un element nou!
+        Nume: ${itemToAdd.name} 
+        Cantitate:${itemToAdd.quantity}`,
+        'success',
+        5000,
+      );
+      this.clearFields();
+    }
+    this.setState({
+      ...oldState,
+      obiecte: oldObj,
+      name_error_text: nameErr,
+      quantity_error_text: quantityErr,
+    });
   }
   changeState(event) {
     // Sets the state of the currentItem based on the event
     let currentItem = this.state.currentItem;
+    let errorField;
     currentItem[event.target.id] = event.target.value;
-    this.setState({ currentItem: currentItem });
+    if (event.target.id === 'name') errorField = 'name_error_text';
+    else errorField = 'quantity_error_text'; // Removes error of the selected input
+    this.setState({
+      ...this.state,
+      currentItem: currentItem,
+      [errorField]: CONSTANTS.empty,
+    });
   }
   render() {
-    const { objects, currentItem } = this.state; // State destructuring
+    const { objects, currentItem, name_error_text, quantity_error_text } =
+      this.state; // State destructuring
     const HANDLERS = {
       handleCheckboxCheck: this.handleCheckboxCheck,
       handleClickPlus: this.handleClickPlus,
@@ -295,6 +321,8 @@ class App extends Component {
               <td className='right'>
                 <MainInput // Main Div with input and add button
                   currentItem={currentItem}
+                  name_error_text={name_error_text}
+                  quantity_error_text={quantity_error_text}
                   changeState={this.changeState}
                   handleClickAddButton={this.handleClickAddButton}
                 />

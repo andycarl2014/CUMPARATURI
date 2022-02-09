@@ -1,5 +1,6 @@
 // Library imports
 import React, { Component } from 'react';
+import { CONSTANTS } from '../CONST';
 import {
   ButtonAdd,
   CustomTextField,
@@ -14,6 +15,8 @@ export default class MainInput extends Component {
       currentItem: { name, quantity },
       changeState,
       handleClickAddButton,
+      name_error_text,
+      quantity_error_text,
     } = this.props; // Props destructuring
 
     return (
@@ -27,17 +30,20 @@ export default class MainInput extends Component {
             type='text'
             value={name}
             onChange={changeState}
+            error={name_error_text === CONSTANTS.empty ? false : true}
+            helperText={name_error_text}
           />
           <br />
 
           <CustomTextField // Input for Item's quantity
             id='quantity'
             name='quantity'
-            type='number'
+            type='text'
             label='Quantity'
-            min={1}
             value={quantity}
             onChange={changeState}
+            error={quantity_error_text === CONSTANTS.empty ? false : true}
+            helperText={quantity_error_text}
           />
           <br />
           <ButtonAdd // Add button

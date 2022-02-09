@@ -16,10 +16,12 @@ export const withSnackbar = (WrappedComponent) => {
       };
     }
     handleClose = (event, reason) => {
+      // Closes alert
       if (reason === 'clickaway') return;
       this.setState({ ...this.state, open: false });
     };
     showMessage = (message, severity, duration = 2000) => {
+      // Renders a message
       this.setState({
         ...this.state,
         message: message,
@@ -29,7 +31,7 @@ export const withSnackbar = (WrappedComponent) => {
       });
     };
     render() {
-      const { vertical, horizontal, open } = this.state;
+      const { vertical, horizontal, open, duration } = this.state;
       return (
         <>
           <WrappedComponent
@@ -37,7 +39,7 @@ export const withSnackbar = (WrappedComponent) => {
             snackbarShowMessage={this.showMessage}
           />
           <Snackbar
-            autoHideDuration={3000}
+            autoHideDuration={duration}
             open={open}
             anchorOrigin={{ vertical, horizontal }}
             onClose={this.handleClose}>

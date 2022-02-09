@@ -4,3 +4,4 @@ export { default as Header } from './Header';
 export { default as ListItems } from './ListItems';
 export { default as MainInput } from './MainInput';
 export { withSnackbar } from './higherOrderComponent';
+export { validateName, validateQuantity } from './Regex';

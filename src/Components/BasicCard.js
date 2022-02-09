@@ -40,7 +40,6 @@ export default class BasicCard extends Component {
         <CustomCard>
           <CardContent>
             <TypographyBasicCard>Name: {name}</TypographyBasicCard>
-
             <TypographyBasicCard>Quantity: {quantity}</TypographyBasicCard>
             <TypographyBasicCardModifyQ>
               Modify Quantity:
