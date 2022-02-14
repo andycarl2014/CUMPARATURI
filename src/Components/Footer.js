@@ -1,24 +1,21 @@
 // Library imports
 import { Container, Toolbar } from '@mui/material';
-import React, { Component } from 'react';
-import { Box } from '@mui/system';
+import React from 'react';
 
 //Custom imports
 import { CONSTANTS } from '../CONST';
-import { AppBarCustom, TypographyCustom } from './styles';
+import { AppBarCustom, TypographyCustom, BoxFooter } from './styles';
 
-export default class Footer extends Component {
-  render() {
-    return (
-      <Box>
-        <AppBarCustom>
-          <Container>
-            <Toolbar>
-              <TypographyCustom>{CONSTANTS.footer}</TypographyCustom>
-            </Toolbar>
-          </Container>
-        </AppBarCustom>
-      </Box>
-    );
-  }
+export default function Footer() {
+  return (
+    <BoxFooter>
+      <AppBarCustom>
+        <Container>
+          <Toolbar>
+            <TypographyCustom>{CONSTANTS.footer}</TypographyCustom>
+          </Toolbar>
+        </Container>
+      </AppBarCustom>
+    </BoxFooter>
+  );
 }

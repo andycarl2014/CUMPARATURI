@@ -14,5 +14,6 @@ const CONSTANTS = {
   emptyField: 'Field must not be empty!',
   invalidQuantity: 'Quantity must be a positive number!',
   invalidName: 'Name must contain only letters, numbers and space',
+  AUTO_DISMISS: 5000,
 };
 export { CONSTANTS };
